@@ -19,3 +19,5 @@ Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
 To https://github.com/jlhb1984/Zonar_projects.git
    7532fe1..dce8bbb  main -> main
 PS C:\Users\Jose.Hurtado\Documents\projects>
+
+I tried with Git Bash at the end.
