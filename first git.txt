@@ -1,0 +1,4 @@
+Using Power Shell
+PS C:\Users\Jose.Hurtado\Documents> venv_da/Scripts/activate
+(venv_da) PS C:\Users\Jose.Hurtado\Documents> deactivate
+PS C:\Users\Jose.Hurtado\Documents>
