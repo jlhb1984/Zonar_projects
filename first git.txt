@@ -2,3 +2,20 @@ Using Power Shell
 PS C:\Users\Jose.Hurtado\Documents> venv_da/Scripts/activate
 (venv_da) PS C:\Users\Jose.Hurtado\Documents> deactivate
 PS C:\Users\Jose.Hurtado\Documents>
+
+PS C:\Users\Jose.Hurtado\Documents> cd projects
+PS C:\Users\Jose.Hurtado\Documents\projects> git add .
+PS C:\Users\Jose.Hurtado\Documents\projects> git commit -m "Txt file added to show the way as I used Git and Venv."
+[main dce8bbb] Txt file added to show the way as I used Git and Venv.
+ 1 file changed, 4 insertions(+)
+ create mode 100644 first git.txt
+PS C:\Users\Jose.Hurtado\Documents\projects> git push origin main
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 435 bytes | 435.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/jlhb1984/Zonar_projects.git
+   7532fe1..dce8bbb  main -> main
+PS C:\Users\Jose.Hurtado\Documents\projects>
