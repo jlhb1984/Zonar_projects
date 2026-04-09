@@ -5,6 +5,9 @@
 /*
 The program starts with clock signal defined by OCR1A registrer placed on void setup(). To turn off the clock, follow 
 this options: x+6+cad.
+PD6: ANALOG INPUT 6 IN+ comparator.
+PD7: ANALOG INPUT 7 IN- comparator.
+PB1: DIGITAL OUTPUT 9 Clock signal.
 */
 int val,apin0=A0,apin1=A1,apin2=A2,apin3=A3,apin4=A4,apin5=A5,dpin2=2,dpin13=13,dpin9=9,compin0=6,compin1=7;
 char op,clock_op;
@@ -33,7 +36,7 @@ void setup() {
   Serial.begin(9600);
   pinMode(dpin13,OUTPUT);
   pinMode(dpin2,OUTPUT);
-  pinMode(dpin9,OUTPUT);  //0C1A
+  pinMode(dpin9,OUTPUT);  //0C1A.
   pinMode(compin0,INPUT);
   pinMode(compin1,INPUT);
   //Clock:  
@@ -63,7 +66,7 @@ void loop() {
 
 void serialEvent(){
   op=Serial.read();
-  Serial.print("0 CAD0, 1 CAD1, 2 CAD2, 3 CAD3, 4 CAD4, 5 CAD5 6 CLOCK OFF 7 One Wire.");
+  Serial.print("\n\n 0 CAD0.\n 1 CAD1.\n 2 CAD2.\n 3 CAD3.\n 4 CAD4.\n 5 CAD5.\n 6 CLOCK OFF.\n 7 One Wire.");
   
   switch(op){
     case '0':
@@ -71,7 +74,7 @@ void serialEvent(){
       val=analogRead(apin0);
       Serial.println(val); 
       op=Serial.read();  
-      }while(op!='x');// del do
+      }while(op!='x');// del do.
       break;
 
     case '1':
@@ -79,7 +82,7 @@ void serialEvent(){
       val=analogRead(apin1);
       Serial.println(val); 
       op=Serial.read();  
-      }while(op!='x');// del do
+      }while(op!='x');// del do.
       break;
 
     case '2':
@@ -87,7 +90,7 @@ void serialEvent(){
       val=analogRead(apin2);
       Serial.println(val); 
       op=Serial.read();  
-      }while(op!='x');// del do
+      }while(op!='x');// del do.
       break;
 
     case '3':
@@ -95,7 +98,7 @@ void serialEvent(){
       val=analogRead(apin3);
       Serial.println(val); 
       op=Serial.read();  
-      }while(op!='x');// del do
+      }while(op!='x');// del do.
       break;
 
     case '4':
@@ -103,7 +106,7 @@ void serialEvent(){
       val=analogRead(apin4);
       Serial.println(val); 
       op=Serial.read();  
-      }while(op!='x');// del do
+      }while(op!='x');// del do.
       break;
 
     case '5':
@@ -111,7 +114,7 @@ void serialEvent(){
       val=analogRead(apin5);
       Serial.println(val); 
       op=Serial.read();  
-      }while(op!='x');// del do
+      }while(op!='x');// del do.
       break;
 
     case '6':
@@ -169,19 +172,19 @@ void serialEvent(){
 
     ds.reset();
     ds.select(addr);
-    ds.write(0x44, 1);        // start conversion, with parasite power on at the end
+    ds.write(0x44, 1);        // start conversion, with parasite power on at the end.
     
-    delay(1000);     // maybe 750ms is enough, maybe not
+    delay(1000);     // maybe 750ms is enough, maybe not.
     // we might do a ds.depower() here, but the reset will take care of it.
     
     present = ds.reset();
     ds.select(addr);    
-    ds.write(0xBE);         // Read Scratchpad
+    ds.write(0xBE);         // Read Scratchpad.
 
     Serial.print("  Data = ");
     Serial.print(present, HEX);
     Serial.print(" ");
-    for ( i = 0; i < 9; i++) {           // we need 9 bytes
+    for ( i = 0; i < 9; i++) {           // we need 9 bytes.
       data[i] = ds.read();
       Serial.print(data[i], HEX);
       Serial.print(" ");
@@ -196,18 +199,18 @@ void serialEvent(){
     // even when compiled on a 32 bit processor.
     int16_t raw = (data[1] << 8) | data[0];
     if (type_s) {
-      raw = raw << 3; // 9 bit resolution default
+      raw = raw << 3; // 9 bit resolution default.
       if (data[7] == 0x10) {
-        // "count remain" gives full 12 bit resolution
+        // "count remain" gives full 12 bit resolution.
         raw = (raw & 0xFFF0) + 12 - data[6];
       }
     } else {
       byte cfg = (data[4] & 0x60);
-      // at lower res, the low bits are undefined, so let's zero them
-      if (cfg == 0x00) raw = raw & ~7;  // 9 bit resolution, 93.75 ms
-      else if (cfg == 0x20) raw = raw & ~3; // 10 bit res, 187.5 ms
-      else if (cfg == 0x40) raw = raw & ~1; // 11 bit res, 375 ms
-      //// default is 12 bit resolution, 750 ms conversion time
+      // at lower res, the low bits are undefined, so let's zero them.
+      if (cfg == 0x00) raw = raw & ~7;  // 9 bit resolution, 93.75 ms.
+      else if (cfg == 0x20) raw = raw & ~3; // 10 bit res, 187.5 ms.
+      else if (cfg == 0x40) raw = raw & ~1; // 11 bit res, 375 ms.
+      //// default is 12 bit resolution, 750 ms conversion time.
     }
     celsius = (float)raw / 16.0;
     fahrenheit = celsius * 1.8 + 32.0;
@@ -222,4 +225,4 @@ void serialEvent(){
     Serial.print(" Fin");    
     }// del switch.  
  
-}// del serialEvent
+}// del serialEvent.
