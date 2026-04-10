@@ -12,8 +12,8 @@ PB1: DIGITAL OUTPUT 9 Clock signal.
 PB2: DIGITAL INPUT 10 RX.
 PB3: DIGITAL OUTPUT 11 TX.
 */
-int val,apin0=A0,apin1=A1,apin2=A2,apin3=A3,apin4=A4,apin5=A5,dpin2=2,dpin13=13,dpin9=9,compin0=6,compin1=7,s10,s11,s12,s13,s14,s15,s16,s17,s18;
-char op,clock_op;
+int val,apin0=A0,apin1=A1,apin2=A2,apin3=A3,apin4=A4,apin5=A5,dpin2=2,dpin13=13,dpin9=9,compin0=6,compin1=7,s10,s11,s12,s13,s14,s15,s16,s17,s18,counter;
+char op,clock_op,op_aux;
 float celsius, fahrenheit;
 SoftwareSerial mySerial(10,11,1); // RX, TX
 OneWire  ds(10);
@@ -83,7 +83,7 @@ void serialEvent(){
       Serial.println(val); 
       op=Serial.read();  
       }while(op!='x');// del do.
-      break;
+    break;
 
     case '1':
     do{
@@ -91,7 +91,7 @@ void serialEvent(){
       Serial.println(val); 
       op=Serial.read();  
       }while(op!='x');// del do.
-      break;
+    break;
 
     case '2':
     do{
@@ -99,7 +99,7 @@ void serialEvent(){
       Serial.println(val); 
       op=Serial.read();  
       }while(op!='x');// del do.
-      break;
+    break;
 
     case '3':
     do{
@@ -107,7 +107,7 @@ void serialEvent(){
       Serial.println(val); 
       op=Serial.read();  
       }while(op!='x');// del do.
-      break;
+    break;
 
     case '4':
     do{
@@ -115,7 +115,7 @@ void serialEvent(){
       Serial.println(val); 
       op=Serial.read();  
       }while(op!='x');// del do.
-      break;
+    break;
 
     case '5':
     do{
@@ -123,98 +123,102 @@ void serialEvent(){
       Serial.println(val); 
       op=Serial.read();  
       }while(op!='x');// del do.
-      break;
+    break;
 
     case '6':
     TCCR1B=0b00000000;
-      break;
+    break;
 
     case '7':    
-    Serial.print("Working!");
+    Serial.print("Type x to end. You must wait until 4 minutes to end the loop.");
+    counter=4; // calamp 4, TopFly 1.
     
-    //Simulación de rising.
-    for (int i=0;i<4;i++){
-      s10=62; //hex=3E  Prefix
-      mySerial.write(s10);
-      delay(10);
+    do{      
+      //Raising.
+      op_aux=Serial.read();
+      for (int i=0;i<counter;i++){
+        s10=62; //hex=3E  Prefix
+        mySerial.write(s10);
+        delay(10);
 
-      s11=1; //hex=01   Sender network address
-      mySerial.write(s11);
-      delay(10);
+        s11=1; //hex=01   Sender network address
+        mySerial.write(s11);
+        delay(10);
 
-      s12=7; //hex=07   Command code
-      mySerial.write(s12);
-      delay(10);
+        s12=7; //hex=07   Command code
+        mySerial.write(s12);
+        delay(10);
 
-      s13=39; //hex=27    Temperature
-      mySerial.write(s13);
-      delay(10);
+        s13=39; //hex=27    Temperature
+        mySerial.write(s13);
+        delay(10);
 
-      s14=255; //hex=FF    User value 01
-      mySerial.write(s14);
-      delay(10);
+        s14=255; //hex=FF    User value 01
+        mySerial.write(s14);
+        delay(10);
 
-      s15=15; //hex=0F   User value 02
-      mySerial.write(s15);
-      delay(10);
+        s15=15; //hex=0F   User value 02
+        mySerial.write(s15);
+        delay(10);
 
-      s16=255; //hex=FF  Tech user value 01
-      mySerial.write(s16);
-      delay(10);
+        s16=255; //hex=FF  Tech user value 01
+        mySerial.write(s16);
+        delay(10);
 
-      s17=255; //hex=FF    Tech user value 02
-      mySerial.write(s17);
-      delay(10);
+        s17=255; //hex=FF    Tech user value 02
+        mySerial.write(s17);
+        delay(10);
 
-      s18=84; //hex=54    CRC
-      mySerial.write(s18);
-      delay(10);
-      }//del rising.
+        s18=84; //hex=54    CRC
+        mySerial.write(s18);
+        delay(10);
+        }//Rising.
 
-      delay(1000); //1 minuto.
+        delay(60000); //1 minute.
 
-      //Simulación de dropping.
+        //Dropping.
 
-    for(int i=0;i<4;i++){
-      s10=62; //hex=3E  Prefix
-      mySerial.write(s10);
-      delay(10);
+      for(int i=0;i<counter;i++){
+        s10=62; //hex=3E  Prefix
+        mySerial.write(s10);
+        delay(10);
 
-      s11=1; //hex=01   Sender network address
-      mySerial.write(s11);
-      delay(10);
+        s11=1; //hex=01   Sender network address
+        mySerial.write(s11);
+        delay(10);
 
-      s12=7; //hex=07   Command code
-      mySerial.write(s12);
-      delay(10);
+        s12=7; //hex=07   Command code
+        mySerial.write(s12);
+        delay(10);
 
-      s13=35; //hex=23    Temperature
-      mySerial.write(s13);
-      delay(10);
+        s13=35; //hex=23    Temperature
+        mySerial.write(s13);
+        delay(10);
 
-      s14=220; //hex=DC    User value 01
-      mySerial.write(s14);
-      delay(10);
+        s14=220; //hex=DC    User value 01
+        mySerial.write(s14);
+        delay(10);
 
-      s15=2; //hex=02   User value 02
-      mySerial.write(s15);
-      delay(10);
+        s15=2; //hex=02   User value 02
+        mySerial.write(s15);
+        delay(10);
 
-      s16=201; //hex=C9  Tech user value 01
-      mySerial.write(s16);
-      delay(10);
+        s16=201; //hex=C9  Tech user value 01
+        mySerial.write(s16);
+        delay(10);
 
-      s17=45; //hex=2D    Tech user value 02
-      mySerial.write(s17);
-      delay(10);
+        s17=45; //hex=2D    Tech user value 02
+        mySerial.write(s17);
+        delay(10);
 
-      s18=207; //hex=CF    CRC
-      mySerial.write(s18);
-      delay(10);
-      }//del dropping.
+        s18=207; //hex=CF    CRC
+        mySerial.write(s18);
+        delay(10);
+        }//Dropping.
 
-      delay(1000); //1 minuto.
-      break;  
+        delay(60000); //1 minute.
+      }while(op_aux!='x');    
+    break;  
 
     case '8':
       if ( !ds.search(addr)) {
@@ -261,8 +265,7 @@ void serialEvent(){
           default:
           Serial.println("Device is not a DS18x20 family device.");
           type_s=0;
-          //return;
-        
+          //return;        
         }
 
     ds.reset();
