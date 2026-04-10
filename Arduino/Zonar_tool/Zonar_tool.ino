@@ -37,7 +37,7 @@ ISR(TIMER1_COMPA_vect){
 }
 
 void setup() {
-  Serial.begin(9600);     //Cambiar a 57600 si es requerido.
+  Serial.begin(9600);
   pinMode(dpin13,OUTPUT);
   pinMode(dpin2,OUTPUT);
   pinMode(dpin9,OUTPUT);  //0C1A.
@@ -321,6 +321,6 @@ void serialEvent(){
 
     default:
     Serial.print(" Fin");    
-  }// del switch.  
+  }// Switch.  
  
-}// del serialEvent.
+}// SerialEvent.
