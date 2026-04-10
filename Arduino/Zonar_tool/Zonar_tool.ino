@@ -1,3 +1,4 @@
+#include <SoftwareSerial.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <OneWire.h>
@@ -8,10 +9,13 @@ this options: x+6+cad.
 PD6: ANALOG INPUT 6 IN+ comparator.
 PD7: ANALOG INPUT 7 IN- comparator.
 PB1: DIGITAL OUTPUT 9 Clock signal.
+PB2: DIGITAL INPUT 10 RX.
+PB3: DIGITAL OUTPUT 11 TX.
 */
-int val,apin0=A0,apin1=A1,apin2=A2,apin3=A3,apin4=A4,apin5=A5,dpin2=2,dpin13=13,dpin9=9,compin0=6,compin1=7;
+int val,apin0=A0,apin1=A1,apin2=A2,apin3=A3,apin4=A4,apin5=A5,dpin2=2,dpin13=13,dpin9=9,compin0=6,compin1=7,s10,s11,s12,s13,s14,s15,s16,s17,s18;
 char op,clock_op;
 float celsius, fahrenheit;
+SoftwareSerial mySerial(10,11,1); // RX, TX
 OneWire  ds(10);
 
 byte i;
@@ -33,7 +37,7 @@ ISR(TIMER1_COMPA_vect){
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(9600);     //Cambiar a 57600 si es requerido.
   pinMode(dpin13,OUTPUT);
   pinMode(dpin2,OUTPUT);
   pinMode(dpin9,OUTPUT);  //0C1A.
@@ -48,6 +52,10 @@ void setup() {
   TCCR1B|=(1<<CS12)|(1<<CS10);
   TIMSK1 |= (1 << OCIE1A);
   ACSR=bit(ACIE);
+  mySerial.begin(57600);
+    while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+    }
   sei();
   // put your setup code here, to run once:
 }// del setup.
@@ -66,7 +74,7 @@ void loop() {
 
 void serialEvent(){
   op=Serial.read();
-  Serial.print("\n\n 0 CAD0.\n 1 CAD1.\n 2 CAD2.\n 3 CAD3.\n 4 CAD4.\n 5 CAD5.\n 6 CLOCK OFF.\n 7 One Wire.");
+  Serial.print("\n\n 0 CAD0.\n 1 CAD1.\n 2 CAD2.\n 3 CAD3.\n 4 CAD4.\n 5 CAD5.\n 6 CLOCK OFF.\n 7 Fuel Rising/Droping.\n 8 One Wire. \n\n");
   
   switch(op){
     case '0':
@@ -121,7 +129,94 @@ void serialEvent(){
     TCCR1B=0b00000000;
       break;
 
-    case '7':
+    case '7':    
+    Serial.print("Working!");
+    
+    //Simulación de rising.
+    for (int i=0;i<4;i++){
+      s10=62; //hex=3E  Prefix
+      mySerial.write(s10);
+      delay(10);
+
+      s11=1; //hex=01   Sender network address
+      mySerial.write(s11);
+      delay(10);
+
+      s12=7; //hex=07   Command code
+      mySerial.write(s12);
+      delay(10);
+
+      s13=39; //hex=27    Temperature
+      mySerial.write(s13);
+      delay(10);
+
+      s14=255; //hex=FF    User value 01
+      mySerial.write(s14);
+      delay(10);
+
+      s15=15; //hex=0F   User value 02
+      mySerial.write(s15);
+      delay(10);
+
+      s16=255; //hex=FF  Tech user value 01
+      mySerial.write(s16);
+      delay(10);
+
+      s17=255; //hex=FF    Tech user value 02
+      mySerial.write(s17);
+      delay(10);
+
+      s18=84; //hex=54    CRC
+      mySerial.write(s18);
+      delay(10);
+      }//del rising.
+
+      delay(1000); //1 minuto.
+
+      //Simulación de dropping.
+
+    for(int i=0;i<4;i++){
+      s10=62; //hex=3E  Prefix
+      mySerial.write(s10);
+      delay(10);
+
+      s11=1; //hex=01   Sender network address
+      mySerial.write(s11);
+      delay(10);
+
+      s12=7; //hex=07   Command code
+      mySerial.write(s12);
+      delay(10);
+
+      s13=35; //hex=23    Temperature
+      mySerial.write(s13);
+      delay(10);
+
+      s14=220; //hex=DC    User value 01
+      mySerial.write(s14);
+      delay(10);
+
+      s15=2; //hex=02   User value 02
+      mySerial.write(s15);
+      delay(10);
+
+      s16=201; //hex=C9  Tech user value 01
+      mySerial.write(s16);
+      delay(10);
+
+      s17=45; //hex=2D    Tech user value 02
+      mySerial.write(s17);
+      delay(10);
+
+      s18=207; //hex=CF    CRC
+      mySerial.write(s18);
+      delay(10);
+      }//del dropping.
+
+      delay(1000); //1 minuto.
+      break;  
+
+    case '8':
       if ( !ds.search(addr)) {
         Serial.println("No more addresses.");
         Serial.println();
@@ -181,7 +276,7 @@ void serialEvent(){
     ds.select(addr);    
     ds.write(0xBE);         // Read Scratchpad.
 
-    Serial.print("  Data = ");
+    Serial.print("Data = ");
     Serial.print(present, HEX);
     Serial.print(" ");
     for ( i = 0; i < 9; i++) {           // we need 9 bytes.
@@ -214,15 +309,15 @@ void serialEvent(){
     }
     celsius = (float)raw / 16.0;
     fahrenheit = celsius * 1.8 + 32.0;
-    Serial.print("  Temperature = ");
+    Serial.print("Temperature = ");
     Serial.print(celsius);
-    Serial.print(" Celsius, ");
+    Serial.print("Celsius, ");
     Serial.print(fahrenheit);
-    Serial.println(" Fahrenheit");
-    break;
+    Serial.println("Fahrenheit");
+    break;    
 
     default:
     Serial.print(" Fin");    
-    }// del switch.  
+  }// del switch.  
  
 }// del serialEvent.
