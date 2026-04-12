@@ -25,7 +25,7 @@
 #define BLYNK_PRINT Serial
 #define BLYNK_TEMPLATE_ID "TMPL2LxgUF6TY"
 #define BLYNK_TEMPLATE_NAME "monvoltin"
-#define BLYNK_AUTH_TOKEN "LHTtoPg_FZZ6VKBfSnSdlmv2BOYWWQZv"
+#define BLYNK_AUTH_TOKEN "aXLNO5YP9sA-A3lU9MQV8FObZVARikZ3"
 
 #include <SPI.h>
 #include <WiFiNINA.h>
@@ -33,14 +33,16 @@
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
-char ssid[] = "Redmi9A";
-char pass[] = "02021984";
+char ssid[] = "Redmi 9A";
+char pass[] = "jlhb2284";
+char aux='y';
 
 void setup()
 {
   // Debug console
   Serial.begin(9600);
-  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass); 
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+  pinMode(LED_BUILTIN, OUTPUT); 
 }
 
 void sendSensorData() {
@@ -51,6 +53,19 @@ void sendSensorData() {
   Blynk.virtualWrite(V1, voltage0);
   delay(2000);
   Blynk.virtualWrite(V2, voltage1);
+}
+
+BLYNK_WRITE(V0){
+  int pinValue = param.asInt();
+  Serial.print("V0 value is: ");
+  Serial.println(pinValue);
+  do{
+  digitalWrite(LED_BUILTIN, HIGH);  // change state of the LED by setting the pin to the HIGH voltage level
+  delay(pinValue);                  // wait for a second
+  digitalWrite(LED_BUILTIN, LOW);   // change state of the LED by setting the pin to the LOW voltage level
+  delay(pinValue);
+  aux=Serial.read();
+  }while(aux!='x');
 }
 
 BLYNK_WRITE(V1){
