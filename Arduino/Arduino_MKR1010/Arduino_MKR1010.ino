@@ -56,16 +56,11 @@ void sendSensorData() {
 }
 
 BLYNK_WRITE(V0){
+  noTone(LED_BUILTIN);
   int pinValue = param.asInt();
   Serial.print("V0 value is: ");
-  Serial.println(pinValue);
-  do{
-  digitalWrite(LED_BUILTIN, HIGH);  // change state of the LED by setting the pin to the HIGH voltage level
-  delay(pinValue);                  // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);   // change state of the LED by setting the pin to the LOW voltage level
-  delay(pinValue);
-  aux=Serial.read();
-  }while(aux!='x');
+  Serial.println(pinValue); //Basdd on the Book Arduino, pinvalue must be between 20 and 20000.
+  tone(LED_BUILTIN,pinValue);  
 }
 
 BLYNK_WRITE(V1){
