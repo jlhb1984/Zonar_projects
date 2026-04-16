@@ -13,7 +13,7 @@ PB2: DIGITAL INPUT 10 RX.
 PB3: DIGITAL OUTPUT 11 TX.
 */
 int val,apin0=A0,apin1=A1,apin2=A2,apin3=A3,apin4=A4,apin5=A5,dpin2=2,dpin13=13,dpin9=9,compin0=6,compin1=7,s10,s11,s12,s13,s14,s15,s16,s17,s18,counter;
-char op,clock_op,op_aux,unit;
+char op,clock_op,op_aux,unit,temp=0;
 float celsius, fahrenheit;
 SoftwareSerial mySerial(10,11,1); // RX, TX
 OneWire  ds(10);
@@ -350,6 +350,7 @@ void serialEvent(){
 
           case 0x28:
           Serial.println("Chip = Temperature Sensor");
+          temp=1;
           type_s=0;
           break;
 
@@ -401,13 +402,18 @@ void serialEvent(){
       else if (cfg == 0x40) raw = raw & ~1; // 11 bit res, 375 ms.
       //// default is 12 bit resolution, 750 ms conversion time.
     }
-    celsius = (float)raw / 16.0;
+    
+    if (temp==1){
+      celsius = (float)raw / 16.0;
     fahrenheit = celsius * 1.8 + 32.0;
     Serial.print("Temperature = ");
     Serial.print(celsius);
     Serial.print("Celsius, ");
     Serial.print(fahrenheit);
-    Serial.println("Fahrenheit");
+    Serial.println("Fahrenheit");    
+    temp=0;
+    }
+
     break;    
 
     default:
