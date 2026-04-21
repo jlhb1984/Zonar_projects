@@ -56,7 +56,7 @@ void setup() {
     while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
     }
-  sei();
+  //sei();
   // put your setup code here, to run once:
 }// del setup.
 
@@ -66,7 +66,7 @@ void loop() {
     Serial.print("Pico de voltaje detectado, presione x para reestablecer.");
     do{
       op=Serial.read();
-      sei();
+      //sei();
     }while(op!='x');    
   }// del if.
   // put your main code here, to run repeatedly:  
