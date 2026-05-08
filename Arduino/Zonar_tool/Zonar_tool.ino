@@ -381,7 +381,7 @@ void serialEvent(){
     }
     Serial.print(" CRC=");
     Serial.print(OneWire::crc8(data, 8), HEX);
-    Serial.println();
+    Serial.print("\nPress reset on Arduino + option 9 to read another device.");
 
     // Convert the data to actual temperature
     // because the result is a 16 bit signed integer, it should
