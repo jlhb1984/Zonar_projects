@@ -26,6 +26,7 @@ void loop() {
     Serial.println(sensorValue);
     op=Serial.read();
     }while(op!='x');
+    Serial.print("\n1. Analog sensor A0. \n2. Fuel sensor. \n3. OneWire. \nx. Stop&Exit!\n");
     break;
 
     case '2':
@@ -84,7 +85,7 @@ void loop() {
     //CRC.
     Serial1.write(59); //HEX=CF
     delay(2000);
-
+    Serial.print("\n1. Analog sensor A0. \n2. Fuel sensor. \n3. OneWire. \nx. Stop&Exit!\n");
     do{
     op=Serial.read();
     }while(op!='x');
@@ -181,11 +182,13 @@ void loop() {
     }// if - else
     celsius = (float)raw / 16.0;
     fahrenheit = celsius * 1.8 + 32.0;
-    Serial.print("Temperature = ");
+    Serial.print("Numeric data = ");
     Serial.print(celsius);
-    Serial.print(" Celsius, ");
-    Serial.print(fahrenheit);
-    Serial.println(" Fahrenheit");
+    //Serial.print(" Celsius, ");
+    //Serial.print(fahrenheit);
+    //Serial.println(" Fahrenheit");    
+    Serial.print("\nPress reset on the device to test other device!");
+    Serial.print("\n1. Analog sensor A0. \n2. Fuel sensor. \n3. OneWire. \nx. Stop&Exit!\n");
     do{
     op=Serial.read();
     }while(op!='x');
