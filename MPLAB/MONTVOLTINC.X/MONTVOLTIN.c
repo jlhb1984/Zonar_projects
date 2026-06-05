@@ -1,6 +1,6 @@
 /*
  * File:   MONTVOLTIN.c
- * Author: jlhb1
+ * Author: jlhb1984
  *
  * Created on 7 de marzo de 2026, 04:21 PM.
  * Analog input: ADC0 PA0.
