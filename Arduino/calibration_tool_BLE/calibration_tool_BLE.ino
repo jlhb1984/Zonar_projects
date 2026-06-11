@@ -83,20 +83,34 @@ void loop() {
       // use the value to control the LED:
       if (switchCharacteristic.written()) {
         if (switchCharacteristic.value()) {   // any value other than 0
-          Serial.println("Data was received");
-          digitalWrite(ledPin, HIGH);         // will turn the LED on
+          Serial.println("Data was received");          
           //Starting test.
           reference=switchCharacteristic.value();
           systemState=reference;
           stored_state_holder.write(systemState);
           Serial.println(reference);
+          digitalWrite(ledPin, HIGH);         // will turn the LED on
+          delay(500);
+          digitalWrite(ledPin, LOW);
+          delay(500);
+          digitalWrite(ledPin, HIGH);         // will turn the LED on
+          delay(500);
+          digitalWrite(ledPin, LOW);
+
         } else {                              // a 0 value
           Serial.println(F("Data 0 was received"));
-          digitalWrite(ledPin, LOW);          // will turn the LED off
+          digitalWrite(outputPin,LOW);
           reference=switchCharacteristic.value();
           systemState=reference;
           stored_state_holder.write(systemState);
           Serial.println(reference);
+          digitalWrite(ledPin, HIGH);         // will turn the LED on
+          delay(500);
+          digitalWrite(ledPin, LOW);
+          delay(500);
+          digitalWrite(ledPin, HIGH);         // will turn the LED on
+          delay(500);
+          digitalWrite(ledPin, LOW);
         }
       }
     }
@@ -111,9 +125,6 @@ void loop() {
   if (sensorValue>reference){
     Serial.println("Alert!");
     digitalWrite(outputPin,HIGH);
-    digitalWrite(ledPin,HIGH);
-    delay(1000);
-    digitalWrite(ledPin,LOW);
-    delay(1000);
+    digitalWrite(ledPin,HIGH);   
   } 
 }
