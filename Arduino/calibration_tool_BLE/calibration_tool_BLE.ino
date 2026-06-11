@@ -1,29 +1,24 @@
 /*
-  LED
-
-  This example creates a Bluetooth® Low Energy peripheral with service that contains a
-  characteristic to control an LED.
-
-  The circuit:
-  - Arduino MKR WiFi 1010, Arduino Uno WiFi Rev2 board, Arduino Nano 33 IoT,
-    Arduino Nano 33 BLE, or Arduino Nano 33 BLE Sense board.
-
-  You can use a generic Bluetooth® Low Energy central app, like LightBlue (iOS and Android) or
-  nRF Connect (Android), to interact with the services and characteristics
-  created in this sketch.
-
-  This example code is in the public domain.
+This program let sensor calibrations generating a digital reference. It will be compared with an sensorValue A0.
+1. Use the App Calibration_Tool_BLE_1024 to generate a digital reference.
+2. Set the reference.
+3. Reset the IoT device and you must verify that pin12 is On if reference = sensorValue A0.
+4. Disconnect App Calibration_Tool_BLE_1024 with Disconnect button.
 */
 
 #include <ArduinoBLE.h>
+#include <FlashStorage.h>
 
 BLEService ledService("19B10000-E8F2-537E-4F6C-D104768A1214"); // Bluetooth® Low Energy LED Service
+FlashStorage(stored_state_holder, uint16_t);
 
 // Bluetooth® Low Energy LED Switch Characteristic - custom 128-bit UUID, read and writable by central
-BLEByteCharacteristic switchCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLEWrite);
+BLEShortCharacteristic switchCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLEWrite);
 
-const int ledPin=13; // pin to use for the LED
-int reference;
+const int ledPin=13,outputPin=12; // pin to use for the LED
+int reference,sensorValue;
+uint16_t systemState;
+const int analogPin=A0;
 
 void setup() {
   Serial.begin(9600);
@@ -31,6 +26,7 @@ void setup() {
 
   // set LED pin to output mode
   pinMode(ledPin, OUTPUT);
+  pinMode(outputPin, OUTPUT);
 
   // begin initialization
   if (!BLE.begin()) {
@@ -55,6 +51,13 @@ void setup() {
   BLE.advertise();
 
   Serial.println("Waiting for connections.");
+
+  systemState=stored_state_holder.read();
+  Serial.print("Current state recovered from Flash: ");
+  Serial.println(systemState);
+  reference=systemState;
+  Serial.println("Reference: ");
+  Serial.println(reference);
 }
 
 void loop() {
@@ -71,19 +74,29 @@ void loop() {
     String macAddress = BLE.address();  
    
     Serial.print("Arduino BLE MAC Address: ");
-    Serial.println(macAddress);    
-
+    Serial.println(macAddress);
+    Serial.println("SensorValue: ");    
+    Serial.println(sensorValue);    
     // while the central is still connected to peripheral:
     while (central.connected()) {
       // if the remote device wrote to the characteristic,
       // use the value to control the LED:
       if (switchCharacteristic.written()) {
         if (switchCharacteristic.value()) {   // any value other than 0
-          Serial.println("LED on");
+          Serial.println("Data was received");
           digitalWrite(ledPin, HIGH);         // will turn the LED on
+          //Starting test.
+          reference=switchCharacteristic.value();
+          systemState=reference;
+          stored_state_holder.write(systemState);
+          Serial.println(reference);
         } else {                              // a 0 value
-          Serial.println(F("LED off"));
+          Serial.println(F("Data 0 was received"));
           digitalWrite(ledPin, LOW);          // will turn the LED off
+          reference=switchCharacteristic.value();
+          systemState=reference;
+          stored_state_holder.write(systemState);
+          Serial.println(reference);
         }
       }
     }
@@ -92,4 +105,15 @@ void loop() {
     Serial.print(F("Disconnected from central: "));
     Serial.println(central.address());
   }
+  Serial.println("Monitoring"); //When I do the installation, I must delete the //.
+  delay(1000);
+  sensorValue=analogRead(analogPin);
+  if (sensorValue>reference){
+    Serial.println("Alert!");
+    digitalWrite(outputPin,HIGH);
+    digitalWrite(ledPin,HIGH);
+    delay(1000);
+    digitalWrite(ledPin,LOW);
+    delay(1000);
+  } 
 }
