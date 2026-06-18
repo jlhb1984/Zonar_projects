@@ -30,11 +30,11 @@ ISR(ADC_vect){
     if ((low_byte>=datal)&&(high_byte>=datah))
     {
         SET_BIT(PORTB,0);
-    }
+    }// if
     sei();
-}
+}//ISR ADC.
 
-int main(void) {
+int main(void) {    
     DDRA=0b11111110;    //PA0 ADC0 40 ANALOG INPUT. REST AS OUTPUT.
     DDRB=0b11111111;    //PORTB AS OUTPUT.
     DDRD=0b11111110;    //PD0 RXD INPUT,PD1_TXD_OUTPUT,REST AS OUTPUT.    
@@ -44,25 +44,32 @@ int main(void) {
     UCSRA=0b00000000;   //RXC_F,TXC_F,UDRE_F,FE_F,DOR_F,PE_F,U2X_0,F,MOCM_0.
     UCSRC=0b10000110;   //USREL_1/0,UMSEL_0,UPM1_0,UPM0_0,USBS_0,UCSZ1_1,UCSZ0_1,UCPOL_0.
     UCSRB=0b00011000;   //RXCIE_0,TXCIE_0,UDRIE_0,RXEN_1,TXEN_1,UCSZ_0,RXB8_0,TXB8_0.
-    sei();    
-
+    //CLEAR_BIT(PORTB,0);//Unccoment when serial communication works.
+    datal=0b11111111;   //Delete when serial communicarion works.
+    datah=0b00000000;   //Delete when serial communicarion works.
+    ADCSRA|=(1 << ADSC);//START ADC. Delete when serial communication works.
+    sei();              //Delete when serial communicarion works.
+        
     while (1) {        
         while (!(UCSRA & (1<<RXC)))
         {
             if (cont<1)
             {
-            datah=UDR;
+            datal=UDR;
             cont=cont+1;
+            //EEPROM_write(0x00,datal);        
             }//if
             if (cont>0)
             {
-            datal=UDR;
+            datah=UDR;
             cont=0;
+            //EEPROM_write(0x01,datah):
             }//if
         }// while serial.
         ADCSRA|=(1 << ADSC);//START ADC
-        datal=0b11111111;
-        datah=0b00000001;
+        datal=0b11111111;   //Delete when serial communicarion works.
+        datah=0b00000000;   //Delete when serial communicarion works.
         sei();
     }//while
+  
 }//main
