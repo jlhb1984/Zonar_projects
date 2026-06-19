@@ -8,11 +8,15 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+int ind=0;
+unsigned char data;
+
 ISR(USART_RXC_vect)
 {
-    cli();
-    unsigned char data = UDR;
-    PORTB = data;  // Show received byte
+    cli(); 
+    data=UDR;
+    PORTB=data;  // Show received byte
+    ind=1;
     sei();
 }
 
@@ -48,9 +52,8 @@ void main(void) {
     UCSRC=0b10000110;   //USREL_1,UMSEL_0,UPM1_0,UPM0_0,USBS_0,UCSZ1_1,UCSZ0_1,USPOL_0
     UCSRB=0b10010000;   //RXCIE_1,TXCIE_0,UDRIE_0,RXEN_1,TXEN_0,UCSZ2_0,RXB8_0,TXB8_0.
     sei();
-    _delay_ms(1000);
-    int value=2;
-    int read_value=EEPROM_Read(0x00);
+    _delay_ms(1000); 
+    //int valuel=EEPROM_Read(0x00);
     
     while(1)
     {
@@ -58,12 +61,16 @@ void main(void) {
             {
             //PORTB=read_value;
             //PORTC=ADCH;
-            if (ADCH >value)
+            if (ADCH >data)
                 {
                 PORTC|=(1<<PC0);
                 }// if 2.
             ADCSRA=0b11010000;  //ADEN_1,ADCS_START_0,ADATE_0,ADIF_FLAG,ADIE_1,ADPS2_0,ADPS1_0,ADPSO_0.
             }// if 1
+        if (ind>0)
+        {
+        EEPROM_Write(0x00, data);   
+        }
         _delay_ms(1000);
     }// while.   
     return;
