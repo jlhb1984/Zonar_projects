@@ -14,6 +14,8 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/default/production/SENSOR_DRIVE.o
  .data          0x0000000000000000        0x0 build/default/production/SENSOR_DRIVE.o
  .bss           0x0000000000000000        0x0 build/default/production/SENSOR_DRIVE.o
+ .text.EEPROM_Write
+                0x0000000000000000       0x10 build/default/production/SENSOR_DRIVE.o
  .text          0x0000000000000000        0x0 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
  .data          0x0000000000000000        0x0 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
  .bss           0x0000000000000000        0x0 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
@@ -351,32 +353,32 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000       0x30
+.debug_aranges  0x0000000000000000       0x38
  *(.debug_aranges)
  .debug_aranges
-                0x0000000000000000       0x30 build/default/production/SENSOR_DRIVE.o
+                0x0000000000000000       0x38 build/default/production/SENSOR_DRIVE.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000      0x969
+.debug_info     0x0000000000000000      0x974
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x52e C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/ATmega_DFP/3.5.296/xc8/avr/lib/avr5/crtatmega16a.o
- .debug_info    0x000000000000052e      0x43b build/default/production/SENSOR_DRIVE.o
+ .debug_info    0x000000000000052e      0x446 build/default/production/SENSOR_DRIVE.o
 
-.debug_abbrev   0x0000000000000000      0x656
+.debug_abbrev   0x0000000000000000      0x649
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x4e7 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/ATmega_DFP/3.5.296/xc8/avr/lib/avr5/crtatmega16a.o
- .debug_abbrev  0x00000000000004e7      0x16f build/default/production/SENSOR_DRIVE.o
+ .debug_abbrev  0x00000000000004e7      0x162 build/default/production/SENSOR_DRIVE.o
 
-.debug_line     0x0000000000000000      0x2b7
+.debug_line     0x0000000000000000      0x2fd
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000      0x115 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/ATmega_DFP/3.5.296/xc8/avr/lib/avr5/crtatmega16a.o
- .debug_line    0x0000000000000115      0x1a2 build/default/production/SENSOR_DRIVE.o
+ .debug_line    0x0000000000000115      0x1e8 build/default/production/SENSOR_DRIVE.o
 
-.debug_frame    0x0000000000000000       0x44
+.debug_frame    0x0000000000000000       0x54
  *(.debug_frame)
- .debug_frame   0x0000000000000000       0x44 build/default/production/SENSOR_DRIVE.o
+ .debug_frame   0x0000000000000000       0x54 build/default/production/SENSOR_DRIVE.o
 
 .debug_str      0x0000000000000000      0x1af
  *(.debug_str)
@@ -405,9 +407,9 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x0000000000000000       0x20
+.debug_ranges   0x0000000000000000       0x28
  *(.debug_ranges)
- .debug_ranges  0x0000000000000000       0x20 build/default/production/SENSOR_DRIVE.o
+ .debug_ranges  0x0000000000000000       0x28 build/default/production/SENSOR_DRIVE.o
 
 .debug_macro
  *(.debug_macro)
@@ -420,68 +422,67 @@ LOAD data_init
  .note.gnu.avr.deviceinfo
                 0x0000000000000000       0x3c C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/ATmega_DFP/3.5.296/xc8/avr/lib/avr5/crtatmega16a.o
 
-.text.main      0x000000000000006c       0x66
- .text.main     0x000000000000006c       0x66 build/default/production/SENSOR_DRIVE.o
+.text.main      0x000000000000006c       0x6c
+ .text.main     0x000000000000006c       0x6c build/default/production/SENSOR_DRIVE.o
                 0x000000000000006c                main
 
-.text.exit      0x00000000000000d2       0x16
- .text.exit     0x00000000000000d2       0x16 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
-                0x00000000000000d2                exit
+.text.exit      0x00000000000000d8       0x16
+ .text.exit     0x00000000000000d8       0x16 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
+                0x00000000000000d8                exit
 
-.text.EEPROM_Write
-                0x00000000000000e8       0x10
- .text.EEPROM_Write
-                0x00000000000000e8       0x10 build/default/production/SENSOR_DRIVE.o
-                0x00000000000000e8                EEPROM_Write
+.text.__vector_11
+                0x00000000000000ee        0xe
+ .text.__vector_11
+                0x00000000000000ee        0xe build/default/production/SENSOR_DRIVE.o
+                0x00000000000000ee                __vector_11
 
 .text.EEPROM_Read
-                0x00000000000000f8        0xe
+                0x00000000000000fc        0xe
  .text.EEPROM_Read
-                0x00000000000000f8        0xe build/default/production/SENSOR_DRIVE.o
-                0x00000000000000f8                EEPROM_Read
+                0x00000000000000fc        0xe build/default/production/SENSOR_DRIVE.o
+                0x00000000000000fc                EEPROM_Read
 
-.text           0x0000000000000106        0x4
- .text          0x0000000000000106        0x4 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/ATmega_DFP/3.5.296/xc8/avr/lib/avr5/crtatmega16a.o
-                0x0000000000000106                __vector_1
-                0x0000000000000106                __vector_12
-                0x0000000000000106                __bad_interrupt
-                0x0000000000000106                __vector_6
-                0x0000000000000106                __vector_3
-                0x0000000000000106                __vector_11
-                0x0000000000000106                __vector_13
-                0x0000000000000106                __vector_17
-                0x0000000000000106                __vector_19
-                0x0000000000000106                __vector_7
-                0x0000000000000106                __vector_5
-                0x0000000000000106                __vector_4
-                0x0000000000000106                __vector_9
-                0x0000000000000106                __vector_2
-                0x0000000000000106                __vector_15
-                0x0000000000000106                __vector_8
-                0x0000000000000106                __vector_14
-                0x0000000000000106                __vector_10
-                0x0000000000000106                __vector_16
-                0x0000000000000106                __vector_18
-                0x0000000000000106                __vector_20
+.text           0x000000000000010a        0x4
+ .text          0x000000000000010a        0x4 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/ATmega_DFP/3.5.296/xc8/avr/lib/avr5/crtatmega16a.o
+                0x000000000000010a                __vector_1
+                0x000000000000010a                __vector_12
+                0x000000000000010a                __bad_interrupt
+                0x000000000000010a                __vector_6
+                0x000000000000010a                __vector_3
+                0x000000000000010a                __vector_13
+                0x000000000000010a                __vector_17
+                0x000000000000010a                __vector_19
+                0x000000000000010a                __vector_7
+                0x000000000000010a                __vector_5
+                0x000000000000010a                __vector_4
+                0x000000000000010a                __vector_9
+                0x000000000000010a                __vector_2
+                0x000000000000010a                __vector_15
+                0x000000000000010a                __vector_8
+                0x000000000000010a                __vector_14
+                0x000000000000010a                __vector_10
+                0x000000000000010a                __vector_16
+                0x000000000000010a                __vector_18
+                0x000000000000010a                __vector_20
 
-.text._Exit     0x000000000000010a        0x4
- .text._Exit    0x000000000000010a        0x4 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(_Exit.o)
-                0x000000000000010a                _Exit
+.text._Exit     0x000000000000010e        0x4
+ .text._Exit    0x000000000000010e        0x4 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(_Exit.o)
+                0x000000000000010e                _Exit
 
 .text.__dummy_fini
-                0x000000000000010e        0x2
+                0x0000000000000112        0x2
  .text.__dummy_fini
-                0x000000000000010e        0x2 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
-                0x000000000000010e                _fini
+                0x0000000000000112        0x2 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
+                0x0000000000000112                _fini
 
 .text.__dummy_funcs_on_exit
-                0x0000000000000110        0x2
+                0x0000000000000114        0x2
  .text.__dummy_funcs_on_exit
-                0x0000000000000110        0x2 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
-                0x0000000000000110                __funcs_on_exit
+                0x0000000000000114        0x2 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
+                0x0000000000000114                __funcs_on_exit
 
 .text.__dummy_simulator_exit
-                0x0000000000000112        0x2
+                0x0000000000000116        0x2
  .text.__dummy_simulator_exit
-                0x0000000000000112        0x2 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
-                0x0000000000000112                __simulator_exit
+                0x0000000000000116        0x2 c:/program files/microchip/xc8/v3.10/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(exit.o)
+                0x0000000000000116                __simulator_exit
