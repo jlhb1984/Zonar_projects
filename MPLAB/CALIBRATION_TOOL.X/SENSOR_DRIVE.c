@@ -13,12 +13,21 @@ unsigned char data;
 
 ISR(USART_RXC_vect)
 {
-    cli(); 
-    data=UDR;
-    PORTB=data;  // Show received byte
-    ind=1;
+    cli();
+    if (ind<1)
+    {
+        data=UDR;
+        PORTB=data;  // Show received byte
+        ind=1;    
+    }// if
+    if (ind>0)
+    {
+        data=UDR;
+        PORTB=data;  // Show received byte
+        ind=2;    
+    }// if    
     sei();
-}
+}// ISR
 
 void EEPROM_Write(unsigned int address, unsigned char data)
 {
@@ -54,6 +63,8 @@ void main(void) {
     sei();
     _delay_ms(1000); 
     //int valuel=EEPROM_Read(0x00);
+    unsigned char datah=EEPROM_Read(0x00);
+    unsigned char datal=EEPROM_Read(0x01);
     
     while(1)
     {
@@ -61,16 +72,21 @@ void main(void) {
             {
             //PORTB=read_value;
             //PORTC=ADCH;
-            if (ADCH >data)
+            if (ADCH >data)// ((ADCH>datah) && (ADCL>datal)) when I have ab Electrer sensor.
                 {
                 PORTC|=(1<<PC0);
-                }// if 2.
+                }// if 11.
             ADCSRA=0b11010000;  //ADEN_1,ADCS_START_0,ADATE_0,ADIF_FLAG,ADIE_1,ADPS2_0,ADPS1_0,ADPSO_0.
-            }// if 1
-        if (ind>0)
-        {
-        EEPROM_Write(0x00, data);   
-        }
+            }//if 1        
+        if (ind==1)
+            {
+            EEPROM_Write(0x00, data);   
+            }//if 2
+         if (ind==2)
+            {
+            EEPROM_Write(0x01, data);   
+            ind=0;
+            }//if 3
         _delay_ms(1000);
     }// while.   
     return;
