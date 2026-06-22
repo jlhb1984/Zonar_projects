@@ -68,10 +68,12 @@ void main(void) {
     UBRRH=0b00000000;   //2400
     UCSRC=0b10000110;   //USREL_1,UMSEL_0,UPM1_0,UPM0_0,USBS_0,UCSZ1_1,UCSZ0_1,USPOL_0
     UCSRB=0b10010000;   //RXCIE_1,TXCIE_0,UDRIE_0,RXEN_1,TXEN_0,UCSZ2_0,RXB8_0,TXB8_0.
+    result=0b00000000;
+    EEPROM_Write(0x00,result);
     sei();
     _delay_ms(1000); 
-    //int valuel=EEPROM_Read(0x00);
-    unsigned char result=EEPROM_Read(0x00);
+    //int valuel=EEPROM_Read(0x00);        
+    result=EEPROM_Read(0x00);
     
     while(1)
     {
