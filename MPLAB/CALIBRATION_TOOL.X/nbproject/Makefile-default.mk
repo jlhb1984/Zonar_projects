@@ -39,7 +39,7 @@ FINAL_IMAGE=${DISTDIR}/CALIBRATION_TOOL.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 endif
 
 ifeq ($(COMPARE_BUILD), true)
-COMPARISON_BUILD=
+COMPARISON_BUILD=-mafrlcsj
 else
 COMPARISON_BUILD=
 endif
@@ -88,14 +88,14 @@ MP_PROCESSOR_OPTION=ATmega16A
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/SENSOR_DRIVE.o: SENSOR_DRIVE.c  nbproject/Makefile-${CND_CONF}.mk 
+${OBJECTDIR}/SENSOR_DRIVE.o: SENSOR_DRIVE.c  .generated_files/flags/default/5777707b3d5c35c56b4456c0e720a32635b121a7 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/SENSOR_DRIVE.o.d 
 	@${RM} ${OBJECTDIR}/SENSOR_DRIVE.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1 -g -DDEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1 -gdwarf-2  -x c -D__$(MP_PROCESSOR_OPTION)__   -mdfp="${DFP_DIR}/xc8"  -Wl,--gc-sections -O1 -ffunction-sections -fdata-sections -fshort-enums -fno-common -funsigned-char -funsigned-bitfields -Wall -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD)  -gdwarf-3 -mno-const-data-in-progmem     -MD -MP -MF "${OBJECTDIR}/SENSOR_DRIVE.o.d" -MT "${OBJECTDIR}/SENSOR_DRIVE.o.d" -MT ${OBJECTDIR}/SENSOR_DRIVE.o -o ${OBJECTDIR}/SENSOR_DRIVE.o SENSOR_DRIVE.c 
 	
 else
-${OBJECTDIR}/SENSOR_DRIVE.o: SENSOR_DRIVE.c  nbproject/Makefile-${CND_CONF}.mk 
+${OBJECTDIR}/SENSOR_DRIVE.o: SENSOR_DRIVE.c  .generated_files/flags/default/366fadaa2ed8cce7ccbd13d15a380bc53ba45c6e .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/SENSOR_DRIVE.o.d 
 	@${RM} ${OBJECTDIR}/SENSOR_DRIVE.o 
