@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project>                                  
-  <executable name="dist/default/debug/CALIBRATION_TOOL.X.debug.elf">                 
+  <executable name="dist/default/production/TRIALS.X.production.elf">                 
     <memory name="program">              
       <units>bytes</units>                 
       <length>16384</length>                 
-      <used>514</used>                     
-      <free>15870</free>                     
+      <used>146</used>                     
+      <free>16238</free>                     
     </memory>                              
     <memory name="data">                 
       <units>bytes</units>                 
       <length>1024</length>                 
-      <used>5</used>                     
-      <free>1019</free>                     
+      <used>0</used>                     
+      <free>1024</free>                     
     </memory>                              
   </executable>                            
 </project>                                 
