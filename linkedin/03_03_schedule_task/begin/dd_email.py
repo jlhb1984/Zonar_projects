@@ -1,4 +1,4 @@
-import dd_content
+import linkedin_practices.dd_content as dd_content
 import datetime
 import smtplib
 from email.message import EmailMessage

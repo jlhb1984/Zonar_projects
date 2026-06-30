@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-from dd_email import DailyDigestEmail
-from dd_scheduler import DailyDigestScheduler
+#from dd_email import DailyDigestEmail
+#from dd_scheduler import DailyDigestScheduler
 
 class DailyDigestGUI:
 
