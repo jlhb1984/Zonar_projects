@@ -9,10 +9,11 @@ app = FastAPI()
 def read_root():
     return {"Hello": "World"}
 
+"""
 @app.delete("/items/{item_id}")
 def delete_item(item_id: int):
     return {"item_id": item_id, "status": "deleted"}
-
+"""
 @app.post("/Linear regression")
 async def linear_regression(file: UploadFile):
     df= pd.read_csv(file.file)
@@ -24,7 +25,7 @@ async def linear_regression(file: UploadFile):
     return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
 
 @app.post("/Fuel calamp analysis")
-async def upload_excel(file: UploadFile):
+async def upload_excel_calamp(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     e0x=df[df["Status"].str.contains('3E0')]
     row_number=e0x.shape[0]
