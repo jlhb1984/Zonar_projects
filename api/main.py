@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import FastAPI, UploadFile
 import pandas as pd
 import numpy as np
@@ -5,9 +7,17 @@ import matplotlib.pyplot as plt
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+no_seatbelt=pd.DataFrame()
+
+@app.get("/Decode")
+def get_message(value:str):
+    #decoder={'Prefix':x[0:2],'Sender network address':x[2:4],'Command code':x[4:6],'Temperature':x[6:8],'User value of fuel level':x[8:12],'Technological value of fuel level':x[12:16],'CRC':x[16:18]}
+    msb=value[10:12]
+    lsb=value[8:10]
+    measure=msb+lsb
+    dec_measure=int(measure,16)
+    a=value[8:12]
+    return {"N code: ":dec_measure}
 
 """
 @app.delete("/items/{item_id}")
@@ -185,3 +195,32 @@ async def upload_excel_herox(file: UploadFile):
     plt.show()
     
     return {"rows":len(df), "columns": list(df.columns)}
+
+
+@app.post("/Waylens analysis")
+async def upload_csv_waylens(file: UploadFile):
+    df= pd.read_csv(file.file)
+    message_number=df['Message'].value_counts()
+    vf_camera_events=df[df['Message'].str.contains('CameraEvent')]
+    vf_camera_events_number=vf_camera_events['Unnamed: 4'].value_counts()
+    vf_camera_events_categories=vf_camera_events['Unnamed: 5'].value_counts()
+    vf_no_seatbelt=df[df['Unnamed: 4'].str.contains('NO_SEATBELT')]
+#vf_no_seatbelt
+
+    vf_date_time=vf_no_seatbelt[vf_no_seatbelt['Unnamed: 9'].str.contains('time')]
+    #vf_date_time['Unnamed: 9']
+    aux_date_time=[]
+    epoch_date=[]
+    vf_date_time['Date']='NaN'
+    speed=[]
+
+    for i in range(0,vf_date_time.shape[0]):
+        aux_date_time.append(float(vf_date_time.iloc[i,9][5:18])/1000)
+        epoch_date.append(datetime.datetime.fromtimestamp(aux_date_time[i]))    
+        vf_date_time.iloc[i,103]=str(epoch_date[i])
+        speed.append(vf_date_time.iloc[i,19])
+    
+    no_seatbelt['Date']=epoch_date
+    no_seatbelt['Speed']=speed
+
+    return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
