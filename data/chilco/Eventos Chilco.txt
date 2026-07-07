@@ -1,0 +1,46 @@
+Hola compañeros.
+
+Las inquietudes ya se habían respondido al cliente en 2 mails. Hago un resumen:
+
+Saltos de kilometraje en intervalos de tiempo muy cortos:
+lun 27-04-2026:
+Después de analizar la data cruda de las unidades GPS reportadas, encontramos que, aunque no hay inconvenientes con la plataforma o las unidades, se evidenció mensajes en el buffer de las mismas que están siendo transmitidos con retraso, afectando el cálculo del algoritmo y generando los saltos reportados. Este es un inconveniente ocasionado por la cobertura de la red móvil celular y aunque el algoritmo de cálculo puede eliminar estas eventualidades, cuando son muy frecuentes, solo puede atenuarlos en la forma en que ustedes lo han reportado.
+En todo caso, es posible que los saltos reportados vuelvan a suceder si la cobertura de la red celular no es la adecuada.
+
+Velocidades equivalentes físicamente imposibles para un vehículo terrestre.
+25-06-2026:
+Respecto a las velocidades publicadas, es importante tener en cuenta que la información de referencia proporcionada por Google Maps no siempre se encuentra disponible para todos los segmentos de vía. En estos casos, la plataforma muestra únicamente la información recibida desde el dispositivo instalado en el vehículo.
+
+Retrocesos en la lectura del odómetro.
+lun 27-04-2026:
+Después de analizar la data cruda de las unidades GPS reportadas, encontramos que, aunque no hay inconvenientes con la plataforma o las unidades, se evidenció mensajes en el buffer de las mismas que están siendo transmitidos con retraso, afectando el cálculo del algoritmo y generando los saltos reportados. Este es un inconveniente ocasionado por la cobertura de la red móvil celular y aunque el algoritmo de cálculo puede eliminar estas eventualidades, cuando son muy frecuentes, solo puede atenuarlos en la forma en que ustedes lo han reportado.
+En todo caso, es posible que los saltos reportados vuelvan a suceder si la cobertura de la red celular no es la adecuada.
+
+Inconsistencias entre la distancia reportada y el incremento real del odómetro.
+El odómetro no es exacto y las unidades no son perfectas.
+lun 27-04-2026:
+Después de analizar la data cruda de las unidades GPS reportadas, encontramos que, aunque no hay inconvenientes con la plataforma o las unidades, se evidenció mensajes en el buffer de las mismas que están siendo transmitidos con retraso, afectando el cálculo del algoritmo y generando los saltos reportados. Este es un inconveniente ocasionado por la cobertura de la red móvil celular y aunque el algoritmo de cálculo puede eliminar estas eventualidades, cuando son muy frecuentes, solo puede atenuarlos en la forma en que ustedes lo han reportado.
+En todo caso, es posible que los saltos reportados vuelvan a suceder si la cobertura de la red celular no es la adecuada.
+
+Fragmentación de recorridos que genera diferencias en el cálculo del kilometraje.
+No sé a qué se refiere.
+
+Identificar la causa raíz de las inconsistencias evidenciadas.
+1. Cobertura de la red de telefonía móvil.
+2. Calidad de las unidades.
+lun 27-04-2026:
+Después de analizar la data cruda de las unidades GPS reportadas, encontramos que, aunque no hay inconvenientes con la plataforma o las unidades, se evidenció mensajes en el buffer de las mismas que están siendo transmitidos con retraso, afectando el cálculo del algoritmo y generando los saltos reportados. Este es un inconveniente ocasionado por la cobertura de la red móvil celular y aunque el algoritmo de cálculo puede eliminar estas eventualidades, cuando son muy frecuentes, solo puede atenuarlos en la forma en que ustedes lo han reportado.
+En todo caso, es posible que los saltos reportados vuelvan a suceder si la cobertura de la red celular no es la adecuada.
+
+Validar el funcionamiento del algoritmo utilizado para el cálculo del kilometraje y del odómetro.
+25-06-2026:
+Adicionalmente, se verificó que no existe ninguna novedad ni anomalía en el algoritmo de procesamiento de datos de la plataforma.
+
+Confirmar si las novedades corresponden a errores de procesamiento, transmisión o sincronización de la información.
+lun 27-04-2026:
+Después de analizar la data cruda de las unidades GPS reportadas, encontramos que, aunque no hay inconvenientes con la plataforma o las unidades, se evidenció mensajes en el buffer de las mismas que están siendo transmitidos con retraso, afectando el cálculo del algoritmo y generando los saltos reportados. Este es un inconveniente ocasionado por la cobertura de la red móvil celular y aunque el algoritmo de cálculo puede eliminar estas eventualidades, cuando son muy frecuentes, solo puede atenuarlos en la forma en que ustedes lo han reportado.
+En todo caso, es posible que los saltos reportados vuelvan a suceder si la cobertura de la red celular no es la adecuada.
+
+Informar las acciones correctivas que serán implementadas para garantizar la confiabilidad de los reportes generados por la plataforma.
+25-06-2026:
+Como medida correctiva, procederemos con el reemplazo de las unidades por dispositivos de tecnología más reciente, con el fin de eliminar esta condición y mejorar la calidad de la información reportada.
