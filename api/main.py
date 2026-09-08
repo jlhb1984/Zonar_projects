@@ -7,7 +7,7 @@ from fastapi.responses import StreamingResponse
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-#import requests
+import requests
 
 app = FastAPI()
 
@@ -665,7 +665,7 @@ async def subir_excel_el_t(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.post("/Análisis de eventos VidFleet")
+@app.post("/Análisis de eventos VidFleet X")
 async def subir_excel_preprocesado_waylens(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     message_number=df['Message'].value_counts()
@@ -692,11 +692,9 @@ async def subir_excel_preprocesado_waylens(file: UploadFile):
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
-"""
-app.post("/MRR LATAN")
+@app.post("/MRR LATAM")
 async def subir_excel_mrr_latam(file: UploadFile):
-    ubd=pd.read_excel(file.file, engine='openpyxl')
-    
+    ubd=pd.read_excel(file.file, engine='openpyxl')   
     tso_mobile_colombia=ubd[ubd['Dealer'].str.contains('TSO Mobile - Colombia')]
     tso_mobile_peru=ubd[ubd['Dealer'].str.contains('TSO Mobile Peru')]
     uts_sistemas_kalo=ubd[ubd['Dealer'].str.contains('UTS Sistemas Kalo MX')]
@@ -722,5 +720,4 @@ async def subir_excel_mrr_latam(file: UploadFile):
     cop_usd=cop_mrr/trm
     mex_mrr=mex['Monthly Fee'].sum()
     per_mrr=per['Monthly Fee'].sum()
-    return {"MRR Col: ":cop_usd.to_dict(),"MRR Mex":mex_mrr.to_dict(),"MRR Per":per_mrr.to_dict(),"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr).to_dict()}
-"""
+    return {"MRR Col: ":cop_usd,"MRR Mex":mex_mrr,"MRR Per":per_mrr,"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr)}
