@@ -743,3 +743,9 @@ async def subir_excel_mrr_extranjeros(file: UploadFile):
     for i in range(0,customer_foreign.shape[0]):
         aux_mrr=aux_mrr+customer_foreign.iloc[i,10]
     return {"MRR foreign USD":aux_mrr}
+
+@app.get("/Hora Epoch a hora UTC")
+def Digitar_hora_epoch(value:str):
+    aux_epoch_date=float(value)# It is possible use float(aux)/1000
+    col_date=datetime.datetime.fromtimestamp(aux_epoch_date)
+    return {"Epoch: ":value,"Hora UTC: ":col_date}
