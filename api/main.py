@@ -10,7 +10,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 import requests
 
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+from sklearn.linear_model import LinearRegression
+
 app = FastAPI()
+
+@app.get("/Obtener iButton para Calamp")
+def Digitar_trama_con_iButton_para_calamp(value: str):
+    aux_device_cal=value[92:108]
+    return("id: ",aux_device_cal)
+
+@app.get("/Obtener iButton para TopFly")
+def Digitar_trama_con_iButton_para_topfly(value: str):
+    aux_device_tf=value[108:124]
+    return("id: ",aux_device_tf)
 
 @app.get("/Decodificar trama de combustible")
 def Digitar_trama_de_combustible(value:str):
@@ -22,10 +36,48 @@ def Digitar_trama_de_combustible(value:str):
     a=value[8:12]
     return {"N code: ":dec_measure,"Prefix":value[0:2],"Sender network address":value[2:4],"Command code":value[4:6],"Temperature":value[6:8],"User value of fuel level":value[8:12],"Technological value of fuel level":value[12:16],"CRC":value[16:18]}
 
+@app.post("/Regresión polinomial")
+async def subir_Excel_epsilon(file: UploadFile):
+    df=pd.read_excel(file.file, engine='openpyxl')    
+    X_poly=df['Measured'].values.reshape(-1,1)
+    y_poly=df['User'].values.reshape(-1,1)
+
+    # 2. Build a polynomial model (e.g., degree 2)
+    degree=2
+    model=make_pipeline(PolynomialFeatures(degree), LinearRegression())
+
+    # 3. Fit and predict
+    model.fit(X_poly, y_poly)
+
+    linear_step = model.named_steps['linearregression']
+    c = linear_step.intercept_
+    coefs = linear_step.coef_
+
+    #stats_text = f"Slope (m): {c:.4f}\nIntercept (b): {coefs:.4f}"   
+
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
+    ax[0].plot(X_poly, y_poly, 'o', label='Data points')    
+    ax[0].plot(X_poly, model.predict(X_poly), '-', label='Regression line')    
+    ax[0].set_xlabel('N code')
+    #ax[0].set_title(stats_text)
+    ax[0].set_ylabel('Litros')    
+    ax[0].legend()
+    ax[1].plot(X_poly, df['User'])
+    ax[1].plot(X_poly, df['User'], 'o', label='Data points')
+    ax[1].set_xlabel('N code')
+    ax[1].set_ylabel('Galones')
+    ax[1].set_title('Información del técnico')
+    ax[1].legend()
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")
+
 @app.post("/Regresión lineal")
 async def subir_Excel_epsilon(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
-    from sklearn.linear_model import LinearRegression
+    #from sklearn.linear_model import LinearRegression
     X = df[["Measured"]]
     y = df["User"]*3.78541    
     model = LinearRegression()
