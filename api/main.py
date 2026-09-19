@@ -40,7 +40,7 @@ def Digitar_trama_de_combustible(value:str):
 async def subir_Excel_epsilon(file: UploadFile):
     df=pd.read_excel(file.file, engine='openpyxl')    
     X_poly=df['Measured'].values.reshape(-1,1)
-    y_poly=df['User'].values.reshape(-1,1)
+    y_poly=(df['User']*3.78541 ).values.reshape(-1,1)
 
     # 2. Build a polynomial model (e.g., degree 2)
     degree=2
@@ -52,14 +52,17 @@ async def subir_Excel_epsilon(file: UploadFile):
     linear_step = model.named_steps['linearregression']
     c = linear_step.intercept_
     coefs = linear_step.coef_
+    b=coefs[0,1]
+    a=coefs[0,2]
+    c_=c[0]
 
-    #stats_text = f"Slope (m): {c:.4f}\nIntercept (b): {coefs:.4f}"   
+    stats_text = f"a:{a:.12f}\nb:{b:.12f}\nc:{c_:.12f}"    
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
     ax[0].plot(X_poly, y_poly, 'o', label='Data points')    
     ax[0].plot(X_poly, model.predict(X_poly), '-', label='Regression line')    
     ax[0].set_xlabel('N code')
-    #ax[0].set_title(stats_text)
+    ax[0].set_title(stats_text)
     ax[0].set_ylabel('Litros')    
     ax[0].legend()
     ax[1].plot(X_poly, df['User'])
