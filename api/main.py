@@ -748,6 +748,12 @@ async def subir_excel_preprocesado_waylens(file: UploadFile):
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
+@app.get("/Hora Epoch a hora local")
+def Digitar_hora_epoch(value:str):
+    aux_epoch_date=float(value)# It is possible use float(aux)/1000
+    col_date=datetime.datetime.fromtimestamp(aux_epoch_date)
+    return {"Epoch: ":value,"Hora: ":col_date}
+
 @app.post("/MRR LATAM")
 async def subir_excel_mrr_latam(file: UploadFile):
     ubd=pd.read_excel(file.file, engine='openpyxl')   
@@ -798,9 +804,3 @@ async def subir_excel_mrr_extranjeros(file: UploadFile):
     for i in range(0,customer_foreign.shape[0]):
         aux_mrr=aux_mrr+customer_foreign.iloc[i,10]
     return {"MRR foreign USD":aux_mrr}
-
-@app.get("/Hora Epoch a hora local")
-def Digitar_hora_epoch(value:str):
-    aux_epoch_date=float(value)# It is possible use float(aux)/1000
-    col_date=datetime.datetime.fromtimestamp(aux_epoch_date)
-    return {"Epoch: ":value,"Hora: ":col_date}
