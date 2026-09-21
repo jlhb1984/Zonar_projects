@@ -1,6 +1,5 @@
 import datetime
 import io
-from urllib import response
 import matplotlib
 matplotlib.use('Agg') # Tells Matplotlib to run without a GUI monitor
 from fastapi import FastAPI, UploadFile
@@ -8,11 +7,12 @@ from fastapi.responses import StreamingResponse
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import requests
 
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LinearRegression
+
+import requests
 
 app = FastAPI()
 
@@ -35,6 +35,45 @@ def Digitar_trama_de_combustible(value:str):
     dec_measure=int(measure,16)
     a=value[8:12]
     return {"N code: ":dec_measure,"Prefix":value[0:2],"Sender network address":value[2:4],"Command code":value[4:6],"Temperature":value[6:8],"User value of fuel level":value[8:12],"Technological value of fuel level":value[12:16],"CRC":value[16:18]}
+
+@app.post("/Regresión lineal")
+async def subir_Excel_epsilon(file: UploadFile):
+    df= pd.read_excel(file.file, engine='openpyxl')
+    from sklearn.linear_model import LinearRegression
+    X = df[["Measured"]]
+    y = df["User"]*3.78541    
+    model = LinearRegression()
+    model.fit(X, y)
+
+    intercept = model.intercept_
+    slope = model.coef_[0]
+    headers = {
+    "X-Status": "regression created",
+    "X-Intercept": str(intercept),
+    "X-Coefficient": str(slope)
+    }
+
+    stats_text = f"Slope (m): {slope:.4f}\nIntercept (b): {intercept:.4f}"    
+
+    fig, ax = plt.subplots(1,2, figsize=(12, 6))
+    ax[0].plot(X, y, 'o', label='Data points')    
+    ax[0].plot(X, model.predict(X), '-', label='Regression line')    
+    ax[0].set_xlabel('N code')
+    ax[0].set_title(stats_text)
+    ax[0].set_ylabel('Litros')    
+    ax[0].legend()
+    ax[1].plot(X, df['User'])
+    ax[1].plot(X, df['User'], 'o', label='Data points')
+    ax[1].set_xlabel('N code')
+    ax[1].set_ylabel('Galones')
+    ax[1].set_title('Información del técnico')
+    ax[1].legend()
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0) # Reset buffer pointer to the beginning
+    plt.close() # Free up server memory
+    return StreamingResponse(buf, media_type="image/png")
+    #return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
 
 @app.post("/Regresión polinomial")
 async def subir_Excel_epsilon(file: UploadFile):
@@ -76,45 +115,6 @@ async def subir_Excel_epsilon(file: UploadFile):
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
-
-@app.post("/Regresión lineal")
-async def subir_Excel_epsilon(file: UploadFile):
-    df= pd.read_excel(file.file, engine='openpyxl')
-    #from sklearn.linear_model import LinearRegression
-    X = df[["Measured"]]
-    y = df["User"]*3.78541    
-    model = LinearRegression()
-    model.fit(X, y)
-
-    intercept = model.intercept_
-    slope = model.coef_[0]
-    headers = {
-    "X-Status": "regression created",
-    "X-Intercept": str(intercept),
-    "X-Coefficient": str(slope)
-    }
-
-    stats_text = f"Slope (m): {slope:.4f}\nIntercept (b): {intercept:.4f}"    
-
-    fig, ax = plt.subplots(1,2, figsize=(12, 6))
-    ax[0].plot(X, y, 'o', label='Data points')    
-    ax[0].plot(X, model.predict(X), '-', label='Regression line')    
-    ax[0].set_xlabel('N code')
-    ax[0].set_title(stats_text)
-    ax[0].set_ylabel('Litros')    
-    ax[0].legend()
-    ax[1].plot(X, df['User'])
-    ax[1].plot(X, df['User'], 'o', label='Data points')
-    ax[1].set_xlabel('N code')
-    ax[1].set_ylabel('Galones')
-    ax[1].set_title('Información del técnico')
-    ax[1].legend()
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png', bbox_inches='tight')
-    buf.seek(0) # Reset buffer pointer to the beginning
-    plt.close() # Free up server memory
-    return StreamingResponse(buf, media_type="image/png")
-    #return {"status": "regression created", "intercept": model.intercept_, "coefficient": model.coef_[0]}
 
 @app.get("/Pasar litros a galones")
 def digitar_valor_en_litros(value:float):
@@ -576,14 +576,14 @@ async def subir_excel_torch_odometro_velocidad(file: UploadFile):
 
     for i in range(0,df.shape[0]):
         ind_odometer=int(df.iloc[i,3])
-        if ind_odometer>80000000:
-            status.append(df.iloc[i,12])
-            odometer_data.append(int(df.iloc[i,3]))
-            #rpm_data.append(int(df.iloc[i,8]))
-            speed_data.append(int(df.iloc[i,6]))
-            #fuel_data.append((int(df.iloc[i,9],16) & 127))
-            date.append(df.iloc[i,4])
-            x_axis_odo_speed.append(i)
+        #if ind_odometer>80000000:
+        status.append(df.iloc[i,12])
+        odometer_data.append(int(df.iloc[i,3]))
+        #rpm_data.append(int(df.iloc[i,8]))
+        speed_data.append(int(df.iloc[i,6]))
+        #fuel_data.append((int(df.iloc[i,9],16) & 127))
+        date.append(df.iloc[i,4])
+        x_axis_odo_speed.append(i)
 
     for i in range(0,df.shape[0]):
         ind_speed=int(df.iloc[i,8])        
@@ -721,7 +721,7 @@ async def subir_excel_el_t(file: UploadFile):
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
 
-@app.post("/Análisis de eventos VidFleet X")
+@app.post("/Análisis de eventos VidFleet")
 async def subir_excel_preprocesado_waylens(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
     message_number=df['Message'].value_counts()
@@ -748,11 +748,11 @@ async def subir_excel_preprocesado_waylens(file: UploadFile):
 
     return {"Events": vf_camera_events_number.to_dict(), "Categories": vf_camera_events_categories.to_dict(), "message_number": message_number.to_dict()}
 
-@app.get("/Hora Epoch a hora local")
+@app.get("/Hora Epoch a hora UTC")
 def Digitar_hora_epoch(value:str):
     aux_epoch_date=float(value)# It is possible use float(aux)/1000
     col_date=datetime.datetime.fromtimestamp(aux_epoch_date)
-    return {"Epoch: ":value,"Hora: ":col_date}
+    return {"Epoch: ":value,"Hora UTC: ":col_date}
 
 @app.post("/MRR LATAM")
 async def subir_excel_mrr_latam(file: UploadFile):
@@ -782,10 +782,10 @@ async def subir_excel_mrr_latam(file: UploadFile):
     cop_usd=cop_mrr/trm
     mex_mrr=mex['Monthly Fee'].sum()
     per_mrr=per['Monthly Fee'].sum()
-    return {"MRR Col: ":cop_usd,"MRR Mex":mex_mrr,"MRR Per":per_mrr,"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr)}
+    return {"TRM":trm,"MRR Col: ":cop_usd,"MRR Mex":mex_mrr,"MRR Per":per_mrr,"MRR LATAM USD":(cop_usd+mex_mrr+per_mrr)}
 
 @app.post("/MRR para clientes de Colombia")
-async def subir_excel_mrr_colombia(file: UploadFile):
+async def subir_excel_customer_units_colombia(file: UploadFile):
     customer_col=pd.read_excel(file.file, engine='openpyxl')
     url = "https://www.datos.gov.co/resource/ceyp-9c7c.json?$limit=1&$order=vigenciadesde DESC"
     response = requests.get(url)
@@ -795,10 +795,10 @@ async def subir_excel_mrr_colombia(file: UploadFile):
     for i in range(0,customer_col.shape[0]):
         aux_mrr=aux_mrr+customer_col.iloc[i,10]
     aux_mrr=aux_mrr/trm
-    return {"MRR Col USD":aux_mrr}
+    return {"TRM":trm,"MRR Col USD":aux_mrr}
 
 @app.post("/MRR para clientes extranjeros")
-async def subir_excel_mrr_extranjeros(file: UploadFile):
+async def subir_excel_customer_units_extranjeros(file: UploadFile):
     customer_foreign=pd.read_excel(file.file, engine='openpyxl')
     aux_mrr=0.0
     for i in range(0,customer_foreign.shape[0]):
