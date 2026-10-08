@@ -16,6 +16,11 @@ import requests
 
 app = FastAPI()
 
+linear_r=[]
+polinomial_r=[]
+
+df=pd.DataFrame()
+
 @app.get("/Obtener iButton para Calamp")
 def Digitar_trama_con_iButton_para_calamp(value: str):
     aux_device_cal_1=value[108:124] #more than 3 accum
@@ -36,7 +41,7 @@ def Digitar_trama_de_combustible(value:str):
     dec_measure=int(measure,16)
     a=value[8:12]
     return {"N code: ":dec_measure,"Prefix":value[0:2],"Sender network address":value[2:4],"Command code":value[4:6],"Temperature":value[6:8],"User value of fuel level":value[8:12],"Technological value of fuel level":value[12:16],"CRC":value[16:18]}
-
+ 
 @app.post("/Regresión lineal")
 async def subir_Excel_epsilon(file: UploadFile):
     df= pd.read_excel(file.file, engine='openpyxl')
@@ -53,6 +58,8 @@ async def subir_Excel_epsilon(file: UploadFile):
     "X-Intercept": str(intercept),
     "X-Coefficient": str(slope)
     }
+
+    linear_r.append({"intercept": intercept, "coefficient": slope})
 
     stats_text = f"Slope (m): {slope:.4f}\nIntercept (b): {intercept:.4f}"    
 
@@ -96,6 +103,8 @@ async def subir_Excel_epsilon(file: UploadFile):
     a=coefs[0,2]
     c_=c[0]
 
+    polinomial_r.append({"intercept": c_, "coefficient_1": b, "coefficient_2": a})
+
     stats_text = f"a:{a:.12f}\nb:{b:.12f}\nc:{c_:.12f}"    
 
     fig, ax = plt.subplots(1,2, figsize=(12, 6))
@@ -116,6 +125,22 @@ async def subir_Excel_epsilon(file: UploadFile):
     buf.seek(0) # Reset buffer pointer to the beginning
     plt.close() # Free up server memory
     return StreamingResponse(buf, media_type="image/png")
+
+@app.get("/Obtener pendiente e intercepto de regresión lineal")
+def obtener_pendiente_e_intercepto():
+    if linear_r:
+        last_regression = linear_r[-1]
+        return {"intercepto": f"{last_regression['intercept']:.12f}", "pendiente": f"{last_regression['coefficient']:.12f}"}
+    else:
+        return {"message": "No regression data available."}
+
+@app.get("/Obtener pendiente e intercepto de regresión polinomial")
+def obtener_pendiente_e_intercepto_polinomial():
+    if polinomial_r:
+        last_regression = polinomial_r[-1]
+        return {"c": f"{last_regression['intercept']:.12f}", "b": f"{last_regression['coefficient_1']:.12f}", "a": f"{last_regression['coefficient_2']:.12f}"}
+    else:
+        return {"message": "No regression data available."}
 
 @app.get("/Pasar litros a galones")
 def digitar_valor_en_litros(value:float):
