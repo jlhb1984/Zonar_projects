@@ -1,0 +1,16 @@
+CustomerID,Age,PlanType,MonthlyBill,HoursWatched_Last30d,SignupDate,LastSupportTicket,SatisfactionScore
+8432-XYZ,34,Premium,25.99,120.5,2022-08-15,"No issues, everything works great.",5
+1256-ABC,45,Estándar,,80.2,2021-11-30,My recommendations are not relevant.,3
+9874-JKL,120,Básico,9.99,45.1,2023-01-10,Video keeps buffering on my TV.,2
+3321-MNO,28,premium,25.99,210.8,2022-04-22,How do I change my password?,4
+5647-PQR,0,Estándar,15.99,95.0,2024-02-05,I can't log in. The system gives me an error.,1
+7890-STU,52,PREM,,150.3,2021-07-20,The new interface is confusing.,2
+1111-VWX,25,Básico,9.99,60.7,2023-09-01,Can I download shows to watch offline?,4
+2222-YZA,39,Estándar,15.99,75.4,2022-11-10,The app crashed on my phone. I had to restart it.,3
+4455-BCD,150,Premium,,180.0,2020-06-18,Playback error code 500. Please fix.,1
+6789-EFG,41,premium,25.99,195.2,2022-03-12,I love the new documentary series!,5
+8899-HIJ,22,Básico,9.99,55.9,2024-01-20,"Billing question, I think I was overcharged.",3
+9900-KLM,37,Estándar,15.99,110.0,2023-05-18,Audio is out of sync on season 2 of 'The Wanderer'.,2
+3456-NOP,68,Premium,25.99,99.8,2021-07-07,Your competitor has a better price.,2
+7654-QRS,19,Básico,,70.1,2023-10-05,Cannot find the show my friend recommended.,4
+2345-TUV,31,PREM,25.99,140.6,2022-02-01,The search function needs improvement.,3
