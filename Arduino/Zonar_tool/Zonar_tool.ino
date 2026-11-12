@@ -174,7 +174,7 @@ void serialEvent(){
         delay(10);
         }//Rising.
 
-        delay(60000); //1 minute.
+        delay(15000); //1 second
 
         //Dropping.
 
@@ -216,7 +216,7 @@ void serialEvent(){
         delay(10);
         }//Dropping.
 
-        delay(60000); //1 minute.
+        delay(15000); //1 second.
       }while(op_aux!='x');          
     break;
     
